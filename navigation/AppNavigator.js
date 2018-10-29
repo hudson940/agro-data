@@ -2,11 +2,10 @@ import React from 'react';
 import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
 
 import MainTabNavigator from './MainTabNavigator';
-import HomeScreen from '../screens/HomeScreen';
-import Login from '../screens/Login';
+import LoginForm from '../screens/Login';
 
 const AuthStack = createStackNavigator({
-  SingIn: Login,
+  SingIn: LoginForm,
 })
 
 export default createSwitchNavigator({
