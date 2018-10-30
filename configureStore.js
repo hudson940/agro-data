@@ -6,6 +6,7 @@ import { persistStore } from 'redux-persist';
 import reducer from './reducers';
 import promise from './promise';
 
+
 export default function configureStore() {
   const enhancer = compose(
     applyMiddleware(thunk, promise),
