@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Text} from 'native-base';
 import { ExpoConfigView } from '@expo/samples';
-import {authRef} from '../firebase';
+import {authRef} from '../../firebase';
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
     title: 'Configuración',
