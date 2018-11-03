@@ -1,0 +1,11 @@
+{
+    "farm": {
+        "created_at": "Date",
+        "update_at": "Date",
+        "zip_code":"Number",
+        "state":"String",
+        "city":"String", 
+        "location": "Location",
+        "images": "Images",
+    }
+}

@@ -1,0 +1,26 @@
+{   
+    "active":"Bolean",// si es un cultivo activo o antiguo
+    "crop": "String",
+    "type": "String",
+    "seed_certified": "Boolean",
+    "seed_name": "String",
+    "inital_date": "Date", //fecha de incio del cultivo
+    "end_date": "Date", // fecha fin del cultivo
+    "production_est": "Number", // producción estimada ton
+    "production": "Number", // producción real ton
+    "area": "Number", // area en hectareas
+    "density_ha": "Number", // densidad por hectarea
+    "inputs": [ // insumos
+        {
+            "name": "", // ej. fertilizante
+            "quantity_ha": "" // cantidad por hectarea
+        }
+    ],
+    "access_road": { // via de acceso 
+        "distance": "", // distancia en km a la via principal,
+        "time":"", // tiempo de viaje en horas
+        "state": "" // estado de la via ["buena","regular","mala"]
+    },
+    "investment": "",
+    "financing" : "",
+}

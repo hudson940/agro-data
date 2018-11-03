@@ -1,0 +1,50 @@
+{
+    "farm": {
+        "created_at": "Date",
+        "update_at": "Date",
+        "state": {//departamento
+            "zip_code": "",
+            "name": "",
+            "city": ""
+        },
+        "location": "Location",
+        "owner": {
+            "name": "",
+            "phone": "",
+            "age": "",
+        },
+        "crops": [// cultivos
+            {   "active":"Bolean",// si es un cultivo activo o antiguo
+                "crop": "",
+                "type": "",
+                "seed": {
+                    "certified": "Bolean",
+                    "name": ""
+                },
+                "inital_date": "Date", //fecha de incio del cultivo
+                "end_date": "Date", // fecha fin del cultivo
+                "production_est": "Number", // producción estimada ton
+                "production": "Number", // producción real ton
+                "images": [],
+                "area": "Number", // area en hectareas
+                "density_ha": "Number", // densidad por hectarea
+                "inputs": [ // insumos
+                    {
+                        "name": "", // ej. fertilizante
+                        "quantity_ha": "" // cantidad por hectarea
+                    }
+                ],
+                "access_road": { // via de acceso 
+                    "distance": "", // distancia en km a la via principal,
+                    "time":"", // tiempo de viaje en horas
+                    "state": "" // estado de la via ["buena","regular","mala"]
+                },
+                "investment": "",
+                "financing" : {
+
+                }
+            }
+        ],
+        "images": [],
+    }
+}
