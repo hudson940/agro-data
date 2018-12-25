@@ -1,4 +1,4 @@
-{
+{  
     "farm": {
         "created_at": "Date",
         "update_at": "Date",
@@ -7,5 +7,6 @@
         "city":"String", 
         "location": "Location",
         "images": "Images",
+        "phone": "Number",
     }
 }

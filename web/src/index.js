@@ -7,12 +7,22 @@ import reduxThunk from 'redux-thunk'
 import reducers from './store/reducers'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
+import { createBrowserHistory } from "history";
+import { Router, Route, Switch } from "react-router-dom";
+
+import "./assets/css/material-dashboard-react.css?v=1.5.0";
+
+const hist = createBrowserHistory();
+
 
 const store = createStore(reducers, {}, applyMiddleware(reduxThunk))
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+  <Router history={hist}>
+  <App/>
+  </Router>
+  
   </Provider>,
   document.getElementById('root')
 )

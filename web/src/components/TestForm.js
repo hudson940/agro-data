@@ -1,47 +1,47 @@
-import React, { Component } from 'react';
-import t from 'tcomb-form';
-import {connect} from 'react-redux';
-import * as actions from '../store/actions';
+import React, { Component } from 'react'
+import t from 'tcomb-form'
+import { connect } from 'react-redux'
+import * as actions from '../store/actions'
 
 //import { View, StyleSheet } from 'react-native';
 //import modelForm, {Form, docs} from './dataTestForm';
 
-const Form = t.form.Form;
-const parseDataToTcombForm = (data) => {
-  let model = {};
+const Form = t.form.Form
+const parseDataToTcombForm = data => {
+  let model = {}
   Object.keys(data).map((document, index) => {
     let type = t[data[document]]
-    if (type) model[document] = type 
+    if (type) model[document] = type
   })
-  return t.struct(model);
+  return t.struct(model)
 }
 
 class TestForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      
+      formName: 'test_form',
+      formStruct: props.struct,
     }
-    this.props.fetchFormStruct("test_form")
   }
 
   componentDidMount() {
-
-    }
+    this.setState({
+        formStruct: this.props.formStruct[this.state.formName]
+      })
+  }
 
   render() {
-  const  FormUser = () => {
-    let formStruct = this.props.formStruct;
-    if (Object.keys(formStruct).length){
-      return <Form type={parseDataToTcombForm(formStruct)}></Form>
+    const FormTestC = () => {
+      let formStruct = this.state.formStruct
+      if (formStruct && Object.keys(formStruct).length) {
+        return <Form type={parseDataToTcombForm(formStruct)} />
+      } else return <h1>Loading</h1>
     }
-    else return <h1>Loading</h1>
-
-  }
-  console.log("rendering")
+    console.log('rendering')
     return (
       <div>
-       <FormUser/> 
+        <FormTestC />
       </div>
     )
   }
@@ -56,10 +56,6 @@ class TestForm extends Component {
     },
   }); */
 
-  const mapStateToProps = ({ formStruct }) => {
-    return {
-      formStruct,
-    };
-  };
-  
-  export default connect(mapStateToProps,actions)(TestForm);
+
+
+export default TestForm;
