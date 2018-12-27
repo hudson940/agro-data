@@ -3,20 +3,22 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import * as actions from './store/actions'
 //import './App.css';
-import { createBrowserHistory } from "history";
-import { Router, Route, Switch, withRouter } from "react-router-dom";
+
+import { Route, Switch, withRouter } from "react-router-dom";
 
 import "./assets/css/material-dashboard-react.css?v=1.5.0";
 
 import indexRoutes from "./routes/index.js";
 
-const FORMS = ["test_form","farm_form"]
+const FORMS = ["crop_form","farm_form"]
 class App extends Component {
   constructor(props){
     super(props)
     FORMS.forEach( f =>{
       this.props.fetchFormStruct(f)
     })
+    this.props.getLocation()
+    
     
 
   }
@@ -33,9 +35,10 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ formStruct }) => {
+const mapStateToProps = ({ formStruct, coords }) => {
   return {
     formStruct,
+    coords
   };
 };
 

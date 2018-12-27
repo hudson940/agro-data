@@ -2,5 +2,6 @@ mobile/node_modules/**/*
 mobile/.expo/**/*
 configFirebase.js
 google-services.json
+service-account.json
 functions/node_modules/**/*
 web/node_modules/**/*

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+//import PropTypes from 'prop-types'
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles'
 import Checkbox from '@material-ui/core/Checkbox'
@@ -90,7 +90,9 @@ const struct = [
       fullWidth: true
     },
     inputProps: {
-      disabled: false
+      disabled: false,
+      shrink: true,
+      defaultvalue:Date.now()
     }
   },
   {
@@ -225,7 +227,6 @@ class Crop extends Component {
                       {s.labelText}
                       </InputLabel>
                       <Checkbox 
-                      classes = {{checked:state[s.id]}}
                       value = {state[s.id]}
                       onChange = {()=> this.setState({[s.id]:!state[s.id]})}
                       name = {s.id}                      

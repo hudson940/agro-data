@@ -8,7 +8,7 @@ import reducers from './store/reducers'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { createBrowserHistory } from "history";
-import { Router, Route, Switch } from "react-router-dom";
+import { Router } from "react-router-dom";
 
 import "./assets/css/material-dashboard-react.css?v=1.5.0";
 

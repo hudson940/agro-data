@@ -1,11 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import {forms} from '../firebase';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles'
 // core components
-import CustomForm from "../components/CustomForm/CustomForm.jsx";
+import CustomForm from '../components/CustomForm/CustomForm.jsx'
+import { connect } from 'react-redux'
 
 
-const styles = {
+const styles = theme => ({
   cardCategoryWhite: {
     color: 'rgba(255,255,255,.62)',
     margin: '0',
@@ -21,134 +23,62 @@ const styles = {
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
     marginBottom: '3px',
     textDecoration: 'none'
-  }
-}
+  },
 
-const struct = [
-  {
-    type: 'text',
-    labelText: 'Ubicación (Desabilitado)',
-    id: 'location',
-    formControlProps: {
-      fullWidth: true
-    },
-    inputProps: {
-      disabled: true
-    }
-  },
-  {
-    type: 'select',
-    labelText: 'Departamento',
-    id: 'state',
-    formControlProps: {
-      fullWidth: true
-    },
-    inputProps: {
-      disabled: false
-    },
-    options: [{value: 50, option: 'Meta'}]
-  },
-  {
-    type: 'text',
-    labelText: 'Ciudad',
-    id: 'city',
-    formControlProps: {
-      fullWidth: true
-    },
-    inputProps: {
-      disabled: false
-    }
-  },
-  {
-    type: 'text',
-    labelText: 'Nombre Propietario',
-    id: 'owner-name',
-    formControlProps: {
-      fullWidth: true
-    },
-    inputProps: {
-      disabled: false
-    }
-  },
-  {
-    type: 'text',
-    labelText: 'Telefono',
-    id: 'phone',
-    formControlProps: {
-      fullWidth: true
-    },
-    inputProps: {
-      disabled: false
-    }
-  },
-  {
-    type: 'number',
-    labelText: 'Área Total',
-    id: 'area',
-    formControlProps: {
-      fullWidth: true
-    },
-    inputProps: {
-      disabled: false,
-      step: 0.1,
-    }
-  }
-]
+})
+const FORM_NAME = 'farm'
+let struct = localStorage.getItem(FORM_NAME + '_form')
+let values = localStorage.getItem(FORM_NAME + '_values')
 
-const values = {
-  location: 'location',
-  state: 'Meta',
-}
 class Farm extends Component {
   constructor(props) {
     super(props)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        console.log(position.coords)
+      })}
+    this.state = {}
     
-      if(navigator.geolocation) {
+  }
+  componentDidMount(){
+    
+    try {
+      struct = JSON.parse(struct)
+      values = JSON.parse(values)
+      if (values !== null && navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
-          values.location = `latitud:${position.coords.latitude}, longitud: ${position.coords.longitude}`
-        });
-      } else {
-        console.log("Geo Location not supported by browser");
+          values.location = position.coords
+        })
       }
-    
-    this.state = { ...values}
-  }
-
-   componentDidMount(){
-    navigator.geolocation.getCurrentPosition(position => {
-      let location = `latitud:${position.coords.latitude}, longitud: ${position.coords.longitude}`
-      this.setState({location})
-    });
-   }
   
+      this.setState({ struct, values })
+    } catch (e) {
+      // handle empty string
+      console.log('Error', e)
+    }
 
-  handleSubmit(event) {
-    //this.setState({[event.target.name]:event.target.value})
-    event.preventDefault()
-    console.log(this.state)
-  }
-  handleChange(event) {
-    this.setState({ [event.target.name]: event.target.value })
+    
   }
 
   render() {
-    const { classes } = this.props
-    const handleChange = this.handleChange
-    const state = this.state
+    const {struct, values} = this.state;
+    const {classes} = this.props;
     return (
-      <div>
-        <CustomForm
+
+      <CustomForm
+        name={FORM_NAME}
         struct={struct}
         values={values}
         header={{
-          title: 'Modificar Cultivo',
-          description: 'informacion del cultivo'
+          title: 'Datos Personales ',
+          description: 'informacion de la finca'
         }}
         submitText="Guardar"
-      ></CustomForm> 
-      </div>
+      />
     )
   }
 }
+
+Farm = connect()(Farm)
 
 export default withStyles(styles)(Farm)

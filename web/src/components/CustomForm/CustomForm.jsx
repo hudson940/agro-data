@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+//import PropTypes from 'prop-types'
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles'
 import Checkbox from '@material-ui/core/Checkbox'
@@ -13,9 +13,13 @@ import Card from '../Card/Card.jsx'
 import CardHeader from '../Card/CardHeader.jsx'
 //import CardAvatar from '../Card/CardAvatar.jsx'
 import CardBody from '../Card/CardBody.jsx'
+import InputAdornment from '@material-ui/core/InputAdornment';
 //import CardFooter from '../Card/CardFooter.jsx'
-
-const styles = {
+import Snackbar from '@material-ui/core/Snackbar';
+//import Icon from '@material-ui/core/Icon'
+import IconButton from "@material-ui/core/IconButton";
+import Update from '@material-ui/icons/Update';
+const styles = theme => ({
   cardCategoryWhite: {
     color: 'rgba(255,255,255,.62)',
     margin: '0',
@@ -31,14 +35,17 @@ const styles = {
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
     marginBottom: '3px',
     textDecoration: 'none'
-  }
-}
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+})
 
 class CustomForm extends Component {
    constructor(props) {
     super(props);
    // const values  = props.values
-    this.state = { };
+    this.state = { ...props.values};
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   } 
@@ -46,8 +53,11 @@ class CustomForm extends Component {
 
   handleSubmit(event) {
     //this.setState({[event.target.name]:event.target.value})
+    
     event.preventDefault()
-    console.log(this.state)
+    localStorage.setItem(this.props.name+'_values', JSON.stringify(this.state))
+    this.setState({open:true})
+
   }
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value })
@@ -73,7 +83,7 @@ class CustomForm extends Component {
           
           <CardBody>
           <form onSubmit={this.handleSubmit}>
-            {  struct!==undefined?
+            {  struct?
                 struct.map((s, key) => {
                     
                     if(s.type === 'select')
@@ -85,12 +95,28 @@ class CustomForm extends Component {
                       inputProps = {{
                         ...s.inputProps, 
                         onChange: handleChange,
-                        name: s.id,                        
+                        name: s.id,
+                        value : state[s.id],
+                        endAdornment: s.endAdornment?<InputAdornment position="end">{s.endAdornment}</InputAdornment>:undefined                       
                       }}
-                      value = {state[s.id]}
+                      labelProps = {s.labelProps}
                       options = {s.options}
                       formControlProps={s.formControlProps}
 
+                      />
+                      </GridItem>
+                    )
+                    else if(s.type === 'checkbox')
+                    return (
+                      <GridItem xs={12} sm={12} md={8} key={key}>
+                      <InputLabel htmlFor={s.id}>
+                      {s.labelText}
+                      </InputLabel>
+                      <Checkbox
+                      checked = {state[s.id]} 
+                      onChange = {(event)=> this.setState({[s.id]:event.target.checked})}
+                      name = {s.id}
+                      id = {s.id}                      
                       />
                       </GridItem>
                     )
@@ -106,12 +132,18 @@ class CustomForm extends Component {
                                 name: s.id, 
                                 value: state[s.id],
                                 onChange: handleChange,
-                                type: s.type
+                                type: s.type,
+                                endAdornment: s.endAdornment?<InputAdornment position="end">{s.endAdornment}</InputAdornment>:undefined
                              }}
+                             labelProps = {s.labelProps}
                           />
                         </GridItem>
                       )
-                  }):null
+                  }): 
+                    <IconButton color="secondary" onClick = {() => window.location.reload()} className={classes.button} >
+                  Recargue para continuar<Update/>
+                </IconButton>
+                                  
             }
             <Button color="primary" type="submit" round>
               {submitText?submitText:'Enviar'}
@@ -120,6 +152,14 @@ class CustomForm extends Component {
           </CardBody>
           </Card>
         </GridContainer>
+        <Snackbar
+          open={this.state.open}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          autoHideDuration={3000}
+          message={<span id="message-id">Información guardada</span>}
+        />
       </div>
     )
   }

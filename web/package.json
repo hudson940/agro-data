@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^3.4.0",
-    "@material-ui/icons": "^3.0.1",
-    "@material-ui/styles": "^3.0.0-alpha.3",
+    "@material-ui/core": "^3.7.0",
+    "@material-ui/icons": "3.0.1",
+    "@material-ui/styles": "^3.0.0-alpha.4",
     "accept-language": "^3.0.18",
     "fg-loadcss": "^2.1.0",
     "firebase": "^5.5.6",

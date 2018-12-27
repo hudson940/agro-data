@@ -4,8 +4,8 @@ import Person from "@material-ui/icons/Person";
 
 // import ContentPaste from "@material-ui/icons/ContentPaste";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
-import BubbleChart from "@material-ui/icons/BubbleChart";
-import LocationOn from "@material-ui/icons/LocationOn";
+//import BubbleChart from "@material-ui/icons/BubbleChart";
+//import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
 
@@ -17,6 +17,8 @@ import Crops from "../pages/Crops";
 import Login from "../pages/Login";
 import Crop from '../pages/Crop';
 
+
+
 const dashboardRoutes = [
     {
       path: "/dashboard",
@@ -25,7 +27,7 @@ const dashboardRoutes = [
       icon: Dashboard,
       component: DashboardPage,
     },
-    {
+   {
       path: "/farm",
       sidebarName: "Mi finca",
       navbarName: "Mi finca",
@@ -53,10 +55,10 @@ const dashboardRoutes = [
       navbarName: "Login",
       icon: Notifications,
       component: Login,
-    },
+    } ,
     
     
-    { redirect: false, path: "/", to: "/farm", navbarName: "Redirect" }
+    { redirect: true, path: "/", to: "/crops", navbarName: "Redirect" }
   ];
   
   export default dashboardRoutes;
