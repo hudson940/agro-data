@@ -45,17 +45,33 @@ class CustomForm extends Component {
    constructor(props) {
     super(props);
    // const values  = props.values
-    this.state = { ...props.values};
+    this.state = {};
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   } 
+  componentDidMount(){
+    const docRef = this.props.values;
+    const self = this
+    
+    docRef.get().then(doc => {
+      if(doc.exists){
+        let values = doc.data()
+        self.setState(values)
+      }
+    }).catch(err => {
+      console.log('Error getting documents', err);
+    })
+  }
 
 
   handleSubmit(event) {
     //this.setState({[event.target.name]:event.target.value})
-    
     event.preventDefault()
-    localStorage.setItem(this.props.name+'_values', JSON.stringify(this.state))
+    const docRef = this.props.values;
+    let values = this.state
+    console.log(values)
+    docRef.set(values)
+  
     this.setState({open:true})
 
   }
@@ -66,7 +82,7 @@ class CustomForm extends Component {
   render() {
     const handleChange = this.handleChange;
     const state = this.state;
-    const {struct, submitText, classes, header} = this.props;
+    const {struct ,submitText, classes, header} = this.props;
 
     return (
       <div>
@@ -99,7 +115,7 @@ class CustomForm extends Component {
                         value : state[s.id],
                         endAdornment: s.endAdornment?<InputAdornment position="end">{s.endAdornment}</InputAdornment>:undefined                       
                       }}
-                      labelProps = {s.labelProps}
+                      labelProps = {s.labelProps ||{shrink: Boolean(state[s.id])}}
                       options = {s.options}
                       formControlProps={s.formControlProps}
 
@@ -135,7 +151,7 @@ class CustomForm extends Component {
                                 type: s.type,
                                 endAdornment: s.endAdornment?<InputAdornment position="end">{s.endAdornment}</InputAdornment>:undefined
                              }}
-                             labelProps = {s.labelProps}
+                             labelProps = {s.labelProps ||{shrink: Boolean(state[s.id])}}
                           />
                         </GridItem>
                       )

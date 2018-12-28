@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import {forms} from '../firebase';
+import React, { Component } from 'react'
+
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles'
+import CircularProgress from '@material-ui/core/CircularProgress'
 // core components
 import CustomForm from '../components/CustomForm/CustomForm.jsx'
-import { connect } from 'react-redux'
-
+//import { connect } from 'react-redux'
 
 const styles = theme => ({
   cardCategoryWhite: {
@@ -24,61 +24,143 @@ const styles = theme => ({
     marginBottom: '3px',
     textDecoration: 'none'
   },
-
+  progress: {
+    margin: theme.spacing.unit * 2
+  }
 })
-const FORM_NAME = 'farm'
-let struct = localStorage.getItem(FORM_NAME + '_form')
-let values = localStorage.getItem(FORM_NAME + '_values')
-
+const FORM_NAME = 'farm_form'
+const EMAIL = 'andersonvidal94@gmail.com';
 class Farm extends Component {
   constructor(props) {
     super(props)
+    let coords
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
-        console.log(position.coords)
-      })}
-    this.state = {}
-    
+        coords = position.coords
+      })
+      this.state = { coords: coords }
+    } else this.state = {}
   }
-  componentDidMount(){
-    
-    try {
-      struct = JSON.parse(struct)
-      values = JSON.parse(values)
-      if (values !== null && navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-          values.location = position.coords
-        })
-      }
-  
-      this.setState({ struct, values })
-    } catch (e) {
-      // handle empty string
-      console.log('Error', e)
-    }
 
-    
+  componentDidMount() {
+    const self = this
+    const struct = []
+    const db = window.firebase.firestore()
+    const config = db.collection('config')
+    // obtiene las preguntas del formulario y las agrega a @struct
+    config
+      .doc('forms')
+      .collection(FORM_NAME)
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          struct.push(doc.data())
+        })
+        self.setState({ struct: struct })
+      })
+      .catch(err => {
+        console.log('Error getting documents', err)
+        this.setState({
+          struct: [
+            {
+              type: 'text',
+              labelText: 'Ubicación (Desabilitado)',
+              id: 'location',
+              formControlProps: {
+                fullWidth: true
+              },
+              inputProps: {
+                disabled: true
+              }
+            },
+            {
+              type: 'select',
+              labelText: 'Departamento',
+              id: 'state',
+              formControlProps: {
+                fullWidth: true
+              },
+              inputProps: {
+                disabled: false
+              },
+              options: [{ value: 50, option: 'Meta' }]
+            },
+            {
+              type: 'text',
+              labelText: 'Ciudad',
+              id: 'city',
+              formControlProps: {
+                fullWidth: true
+              },
+              inputProps: {
+                disabled: false
+              }
+            },
+            {
+              type: 'text',
+              labelText: 'Nombre Propietario',
+              id: 'owner_name',
+              formControlProps: {
+                fullWidth: true
+              },
+              inputProps: {
+                disabled: false
+              }
+            },
+            {
+              type: 'text',
+              labelText: 'Telefono',
+              id: 'phone',
+              formControlProps: {
+                fullWidth: true
+              },
+              inputProps: {
+                disabled: false
+              }
+            },
+            {
+              type: 'number',
+              labelText: 'Área Total',
+              id: 'area',
+              formControlProps: {
+                fullWidth: true
+              },
+              inputProps: {
+                disabled: false,
+                step: 0.1
+              }
+            }
+          ]
+        })
+      })
+    this.setState({
+      values: db.collection('farms').doc(EMAIL)
+    })
   }
 
   render() {
-    const {struct, values} = this.state;
-    const {classes} = this.props;
-    return (
-
+    const { struct, values } = this.state
+    const { classes } = this.props
+    return struct && values ? (
       <CustomForm
         name={FORM_NAME}
         struct={struct}
         values={values}
         header={{
           title: 'Datos Personales ',
-          description: 'informacion de la finca'
+          description: 'información de la finca'
         }}
         submitText="Guardar"
       />
+    ) : (
+      <div>
+        <h1>Cargando preguntas ...</h1>
+        <CircularProgress className={classes.progress} variant="determinate" />
+      </div>
     )
   }
 }
 
-Farm = connect()(Farm)
+//Farm = connect()(Farm)
 
 export default withStyles(styles)(Farm)

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
-import {farms} from '../firebase';
 
 // @material-ui/core
 import withStyles from '@material-ui/core/styles/withStyles'
@@ -24,7 +23,7 @@ import CardHeader from '../components/Card/CardHeader.jsx'
 import CardBody from '../components/Card/CardBody.jsx'
 import CardFooter from '../components/Card/CardFooter.jsx'
 import Button from '../components/CustomButtons/Button.jsx'
-
+import { successColor } from "../assets/jss/material-dashboard-react";
 const styles = theme => ({
   fab: {
     position: 'fixed',
@@ -106,44 +105,41 @@ const styles = theme => ({
     }
   }
 })
-
-const crops = [
-  {
-    id: 1,
-    active: true,
-    crop: 'Cultivo 1',
-    initial_date: '01/01/10',
-    production_est: '950',
-    production: '800',
-    area: '5'
-  },
-  {
-    id: 2,
-    active: true,
-    crop: 'Cultivo 2',
-    initial_date: '01/01/10',
-    production_est: '950',
-    production: '800',
-    area: '5'
-  },
-  {
-    id: 3,
-    active: false,
-    crop: 'Cultivo 3',
-    initial_date: '01/01/10',
-    production_est: '950',
-    production: '800',
-    area: '5'
-  }
-]
+const EMAIL = 'andersonvidal94@gmail.com'
 
 class Crops extends Component {
+
+  state = {};
+
+  componentDidMount(){
+    const self = this
+    const crops = []
+    const db = window.firebase.firestore()
+    const farms = db.collection('farms')
+    // obtiene las preguntas del formulario y las agrega a @crops
+    farms
+      .doc(EMAIL)
+      .collection('crops')
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          let data = doc.data();
+          data._id = doc.id;
+          crops.push(data);
+        })
+        self.setState({ crops: crops })
+      }).catch(err=>{
+        console.log(err)
+      })
+  }
+
   render() {
-    const { classes } = this.props
+    const { classes } = this.props;
+    const {crops } = this.state;
     return (
       <div>
         <GridContainer>
-          {crops.map((s, key) => {
+          {crops?crops.map((s, key) => {
             return (
               <GridItem xs={12} sm={6} md={3} key={key}>
                 <Card key={key}>
@@ -178,7 +174,7 @@ class Crops extends Component {
                         <Warning />
                       </Danger>
                       <NavLink
-                        to={'/crop/' + s.id}
+                        to={'/crop/' + s._id}
                         activeClassName="active"
                         key={key}
                       >
@@ -192,9 +188,9 @@ class Crops extends Component {
                 </Card>
               </GridItem>
             )
-          })}
+          }):null}
           <Fab color="primary" aria-label="Add" className={classes.fab}>
-            <AddIcon />
+            <NavLink to = "/crop/:id"><AddIcon/></NavLink>
           </Fab>
         </GridContainer>
       </div>

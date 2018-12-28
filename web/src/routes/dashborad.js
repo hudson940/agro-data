@@ -44,7 +44,7 @@ const dashboardRoutes = [
     },
     {
       path: "/crop/:id",
-      sidebarName: "cultivo",
+      sidebarName: "Nuevo Cultivo",
       navbarName: "cultivo",
       icon: Unarchive,
       component: Crop,

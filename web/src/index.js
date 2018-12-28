@@ -1,29 +1,30 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
-import reduxThunk from 'redux-thunk'
-import reducers from './store/reducers'
-import App from './App'
+//import { Provider } from 'react-redux'
+//import { createStore, applyMiddleware } from 'redux'
+//import reduxThunk from 'redux-thunk'
+//import reducers from './store/reducers'
+import App from './App';
 import * as serviceWorker from './serviceWorker'
 import { createBrowserHistory } from "history";
 import { Router } from "react-router-dom";
 
 import "./assets/css/material-dashboard-react.css?v=1.5.0";
 
+
 const hist = createBrowserHistory();
 
 
-const store = createStore(reducers, {}, applyMiddleware(reduxThunk))
+//const store = createStore(reducers, {}, applyMiddleware(reduxThunk))
 
 ReactDOM.render(
-  <Provider store={store}>
+
   <Router history={hist}>
   <App/>
   </Router>
   
-  </Provider>,
+  ,
   document.getElementById('root')
 )
 
