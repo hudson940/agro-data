@@ -1,32 +1,34 @@
 /* eslint-disable */
-import React from "react";
-import PropTypes from "prop-types";
-import { Switch, Route, Redirect} from "react-router-dom";
-
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Switch, Redirect } from 'react-router-dom';
+import PrivateRoute from '../routes/PrivateRoute';
 
 // creates a beautiful scrollbar
-import PerfectScrollbar from "perfect-scrollbar";
-import "perfect-scrollbar/css/perfect-scrollbar.css";
+import PerfectScrollbar from 'perfect-scrollbar';
+import 'perfect-scrollbar/css/perfect-scrollbar.css';
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
+import withStyles from '@material-ui/core/styles/withStyles';
 // core components
-import Header from "../components/Header/Header.jsx";
-import Footer from "../components/Footer/Footer.jsx";
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import Header from '../components/Header/Header.jsx';
+import Footer from '../components/Footer/Footer.jsx';
+import Sidebar from '../components/Sidebar/Sidebar.jsx';
 
-import dashboardRoutes from "../routes/dashborad";
+import dashboardRoutes from '../routes/dashborad';
 
-import dashboardStyle from "../assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
+import dashboardStyle from '../assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx';
 
-import image from "../assets/img/sidebar-4.jpg";
-import logo from "../assets/img/reactlogo.png";
+import image from '../assets/img/sidebar-4.jpg';
+import logo from '../assets/img/reactlogo.png';
 
 const switchRoutes = (
   <Switch>
     {dashboardRoutes.map((prop, key) => {
       if (prop.redirect)
         return <Redirect from={prop.path} to={prop.to} key={key} />;
-      return <Route path={prop.path} component={prop.component} key={key} />;
+      return (
+        <PrivateRoute path={prop.path} component={prop.component} key={key} />
+      );
     })}
   </Switch>
 );
@@ -35,7 +37,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mobileOpen: false
+      mobileOpen: false,
     };
     this.resizeFunction = this.resizeFunction.bind(this);
   }
@@ -43,7 +45,7 @@ class Dashboard extends React.Component {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
   getRoute() {
-    return this.props.location.pathname !== "/maps";
+    return this.props.location.pathname !== '/maps';
   }
   resizeFunction() {
     if (window.innerWidth >= 960) {
@@ -51,10 +53,10 @@ class Dashboard extends React.Component {
     }
   }
   componentDidMount() {
-    if (navigator.platform.indexOf("Win") > -1) {
+    if (navigator.platform.indexOf('Win') > -1) {
       const ps = new PerfectScrollbar(this.refs.mainPanel);
     }
-    window.addEventListener("resize", this.resizeFunction);
+    window.addEventListener('resize', this.resizeFunction);
   }
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
@@ -65,7 +67,7 @@ class Dashboard extends React.Component {
     }
   }
   componentWillUnmount() {
-    window.removeEventListener("resize", this.resizeFunction);
+    window.removeEventListener('resize', this.resizeFunction);
   }
   render() {
     const { classes, ...rest } = this.props;
@@ -73,7 +75,7 @@ class Dashboard extends React.Component {
       <div className={classes.wrapper}>
         <Sidebar
           routes={dashboardRoutes}
-          logoText={"Agro-Data"}
+          logoText={'Agro-Data'}
           logo={logo}
           image={image}
           handleDrawerToggle={this.handleDrawerToggle}
@@ -103,10 +105,9 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(dashboardStyle)(Dashboard);
 
 //export default withStyles(withRouter(connect(mapStateToProps,actions)(Dashboard)));
-

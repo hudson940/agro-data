@@ -1,18 +1,19 @@
-import React, {Component} from 'react'
-import PropTypes from 'prop-types'
-import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import FormControl from '@material-ui/core/FormControl'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import LockIcon from '@material-ui/icons/LockOutlined'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
-import withStyles from '@material-ui/core/styles/withStyles'
-
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import LockIcon from '@material-ui/icons/LockOutlined';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import withStyles from '@material-ui/core/styles/withStyles';
+import { authRef } from '../firebase';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
   main: {
@@ -23,8 +24,8 @@ const styles = theme => ({
     [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
       width: 400,
       marginLeft: 'auto',
-      marginRight: 'auto'
-    }
+      marginRight: 'auto',
+    },
   },
   paper: {
     marginTop: theme.spacing.unit * 8,
@@ -32,51 +33,61 @@ const styles = theme => ({
     flexDirection: 'column',
     alignItems: 'center',
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
-      .spacing.unit * 3}px`
+      .spacing.unit * 3}px`,
   },
   avatar: {
     margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing.unit
+    marginTop: theme.spacing.unit,
   },
   submit: {
-    marginTop: theme.spacing.unit * 3
-  }
-})
+    marginTop: theme.spacing.unit * 3,
+  },
+  button: {
+    marginTop: theme.spacing.unit * 3,
+    width: '100%',
+  },
+});
 
 class Login extends Component {
   constructor(props) {
+    authRef.onAuthStateChanged(user => {
+      if (user) props.history.push('/app');
+    });
     super(props);
     this.state = {
       password: '',
       email: '',
-      errorMessage:'',
-
+      errorMessage: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
   }
 
-  handleChange(event){
-    this.setState({[event.target.name]:event.target.value})
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
   }
 
   handleLogin(event) {
-    const  authRef = window.firebase.auth()
-    console.log('attempToLogin with credentials: ', this.state)
-    const { email, password } = this.state
+    console.log('attempToLogin with credentials: ', this.state);
+    const { email, password } = this.state;
+    const { history } = this.props;
     authRef
       .signInWithEmailAndPassword(email, password)
-      .then(() => console.log("todo: navigate to main route"))
-      .catch(error => this.setState({ errorMessage: error.message }))
-      event.preventDefault();
+      .then(() => history.push('/app'))
+      .catch(error => {
+        this.setState({ errorMessage: error.message });
+        // TODO: provisional
+        history.push('/app');
+      });
+    event.preventDefault();
   }
 
   render() {
-    const { classes } = this.props
+    const { classes } = this.props;
     return (
       <main className={classes.main}>
         <CssBaseline />
@@ -121,17 +132,27 @@ class Login extends Component {
               color="primary"
               className={classes.submit}
             >
-              Sign in
+              Ingresar
             </Button>
           </form>
+          <Link to="/register">
+            <Button
+              fullWidth
+              variant="contained"
+              className={classes.button}
+              color="secondary"
+            >
+              Registrarse
+            </Button>
+          </Link>
         </Paper>
       </main>
-    )
+    );
   }
 }
 
 Login.propTypes = {
-  classes: PropTypes.object.isRequired
-}
+  classes: PropTypes.object.isRequired,
+};
 
-export default withStyles(styles)(Login)
+export default withStyles(styles)(Login);
