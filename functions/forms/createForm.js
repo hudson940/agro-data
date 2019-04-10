@@ -124,6 +124,17 @@ const crop_form = [
       }
     },
     {
+      type: 'text',
+      labelText: 'Nombre de la semilla',
+      id: 'seed_name',
+      formControlProps: {
+        fullWidth: true
+      },
+      inputProps: {
+        disabled: false
+      }
+    },
+    {
       type: 'date',
       labelText: 'Fecha inicial',
       id: 'initial_date',

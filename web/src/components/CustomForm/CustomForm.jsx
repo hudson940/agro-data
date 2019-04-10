@@ -49,9 +49,7 @@ class CustomForm extends Component {
     // const values  = props.values
 
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        coords = position.coords;
-      });
+      navigator.geolocation.getCurrentPosition(p=>null);
     }
     this.state = {};
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -78,9 +76,18 @@ class CustomForm extends Component {
     //this.setState({[event.target.name]:event.target.value})
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
-        coords = position.coords;
+        coords = {
+          accuracy: position.coords.accuracy,
+          altitude: position.coords.altitude,
+          altitudeAccuracy: position.coords.altitudeAccuracy,
+          heading: position.coords.heading,
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          speed: position.coords.speed,
+        };
       });
     }
+
     event.preventDefault();
     const docRef = this.props.values;
     console.log({ ...this.state, coords: coords || 'undefined' });
